@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Location Journey</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 20px;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            height: 100vh;
+            background-color: #f0f0f0;
+        }
+        h1 {
+            font-size: 24px;
+            color: #333;
+        }
+        button {
+            padding: 15px 20px;
+            font-size: 18px;
+            border: none;
+            border-radius: 8px;
+            background-color: #007bff;
+            color: #fff;
+            cursor: pointer;
+            margin-top: 20px;
+            width: 100%;
+            max-width: 300px;
+        }
+        button:active {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <h1>Start Your Journey</h1>
+    <button onclick="startJourney()">Start Journey</button>
+    <audio id="beep-sound" src="https://www.soundjay.com/button/sounds/beep-07.mp3" preload="auto" loop></audio> <!-- Test beep sound -->
+
+    <script><!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Location Journey</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 20px;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            height: 100vh;
+            background-color: #f0f0f0;
+        }
+        h1 {
+            font-size: 24px;
+            color: #333;
+        }
+        button {
+            padding: 15px 20px;
+            font-size: 18px;
+            border: none;
+            border-radius: 8px;
+            background-color: #007bff;
+            color: #fff;
+            cursor: pointer;
+            margin-top: 20px;
+            width: 100%;
+            max-width: 300px;
+        }
+        button:active {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <h1>Start Your Journey</h1>
+    <button onclick="startJourney()">Start Journey</button>
+    <audio id="beep-sound" src="https://www.soundjay.com/button/sounds/beep-07.mp3" preload="auto" loop></audio> <!-- Test beep sound -->
+
+    <script>
+        // Set destination coordinates (latitude and longitude)
+        const endLocation = { latitude: 40.712776, longitude: -74.005974 };
+
+        function startJourney() {
+            // Request geolocation permission and start tracking
+            if (navigator.geolocation) {
+                navigator.geolocation.watchPosition(updatePosition, errorCallback, { enableHighAccuracy: true });
+                alert("Location tracking started! Move toward the destination to hear audio cues.");
+            } else {
+                alert("Geolocation is not supported by this browser.");
+            }
+        }
+
+        function updatePosition(position) {
+            const userCoords = { latitude: position.coords.latitude, longitude: position.coords.longitude };
+            const distanceToEnd = calculateDistance(userCoords, endLocation);
+
+            const beepSound = document.getElementById("beep-sound");
+            if (distanceToEnd < 500) {  // Within 500 meters of destination
+                beepSound.volume = Math.min(1, 1 - distanceToEnd / 500);
+                if (beepSound.paused) beepSound.play();
+            } else {
+                beepSound.pause();
+            }
+        }
+
+        function calculateDistance(coords1, coords2) {
+            const R = 6371e3; // Earth's radius in meters
+            const φ1 = coords1.latitude * Math.PI / 180;
+            const φ2 = coords2.latitude * Math.PI / 180;
+            const Δφ = (coords2.latitude - coords1.latitude) * Math.PI / 180;
+            const Δλ = (coords2.longitude - coords1.longitude) * Math.PI / 180;
+
+            const a = Math.sin(Δφ / 2) * Math.sin(Δφ / 2) +
+                      Math.cos(φ1) * Math.cos(φ2) *
+                      Math.sin(Δλ / 2) * Math.sin(Δλ / 2);
+            const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+
+            return R * c;
+        }
+
+        function errorCallback(error) {
+            switch(error.code) {
+                case error.PERMISSION_DENIED:
+                    alert("User denied the request for Geolocation.");
+                    break;
+                case error.POSITION_UNAVAILABLE:
+                    alert("Location information is unavailable.");
+                    break;
+                case error.TIMEOUT:
+                    alert("The request to get user location timed out.");
+                    break;
+                case error.UNKNOWN_ERROR:
+                    alert("An unknown error occurred.");
+                    break;
+            }
+        }
+    </script>
+</body>
+</html>
+#ddd
